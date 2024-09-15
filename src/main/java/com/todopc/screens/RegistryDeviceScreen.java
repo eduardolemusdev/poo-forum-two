@@ -1,14 +1,12 @@
 package com.todopc.screens;
 
 import com.todopc.database.models.DesktopDevice;
+import com.todopc.database.models.LaptopDevice;
 import com.todopc.database.repositories.IDevicesRepository;
-import com.todopc.execeptions.EmptyValueException;
-import com.todopc.screens.services.SaveDesktopService;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.util.Arrays;
 
 public class RegistryDeviceScreen extends JFrame {
     private JPanel mainPanel;
@@ -48,10 +46,13 @@ public class RegistryDeviceScreen extends JFrame {
     private final String LAPTOPS_OPTION = "2. Laptops";
     private final String TABLETS_OPTION = "3. Tablets";
 
-    private final SaveDesktopService saveDesktopService;
+    private final IDevicesRepository<DesktopDevice> desktopRepository;
+    private final IDevicesRepository<LaptopDevice> laptopRepository;
 
-    public RegistryDeviceScreen(SaveDesktopService saveDesktopService) {
-        this.saveDesktopService = saveDesktopService;
+    public RegistryDeviceScreen(IDevicesRepository<DesktopDevice> desktopRepository, IDevicesRepository<LaptopDevice> laptopRepository) {
+        this.desktopRepository = desktopRepository;
+        this.laptopRepository = laptopRepository;
+
         this.initRegisterComboBox();
         this.handleDeviceToRegisterEvent();
         this.handleSaveDeviceEvent();
@@ -73,12 +74,17 @@ public class RegistryDeviceScreen extends JFrame {
         comboBox1.addItem(TABLETS_OPTION);
     }
 
+    // En este metodo se encuentra la logica para manejar el cambio de equipo a registrar
     private void handleDeviceToRegisterEvent() {
+
+        //Por defecto el primer "Formulario" que se puede ver es para registrar PCDesktops
+        // Asi que hacemos visibles los paneles correspondientes y los demas los ocultamos
         DesktopsPropertiesPanel.setVisible(true);
         RamAndHardDiskPropertiesPanel.setVisible(true);
         LaptopsPropertiesPanel.setVisible(false);
         TabletsPropertiesPanel.setVisible(false);
 
+        //Cuando cambia el combobox seguimos esa logica de ocultar paneles segun el equipo a registrar
         comboBox1.addItemListener((ItemEvent evt) -> {
             if (evt.getStateChange() == ItemEvent.SELECTED) {
                 System.out.println(comboBox1.getSelectedItem());
@@ -119,7 +125,7 @@ public class RegistryDeviceScreen extends JFrame {
                             this.txtFieldDesktopTowerSize.getText(),
                             this.txtFieldHardDriveCapacity.getText(),
                             this.txtFieldMemoryRamCapacity.getText());
-                    this.saveDesktopService.save(newDesktop, this);
+                    this.desktopRepository.saveDevice(newDesktop);
                     break;
                 case LAPTOPS_OPTION:
 

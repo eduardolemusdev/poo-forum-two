@@ -1,14 +1,14 @@
 package com.todopc;
 
-import com.todopc.database.repositories.DevicesRepository;
+import com.todopc.database.models.DesktopDevice;
 import com.todopc.screens.RegistryDeviceScreen;
-import com.todopc.screens.services.SaveDesktopService;
+import com.todopc.database.repositories.DevicesAbstractRepository;
 
 public class Main {
     public static void main(String[] args) {
-        DevicesRepository devicesRepository = new DevicesRepository();
-        SaveDesktopService saveDesktopService = new SaveDesktopService(devicesRepository);
-        RegistryDeviceScreen screen = new RegistryDeviceScreen(saveDesktopService);
+        DevicesAbstractRepository<DesktopDevice> desktopsDeviceRepository = new DevicesAbstractRepository<>();
+
+        RegistryDeviceScreen screen = new RegistryDeviceScreen(desktopsDeviceRepository);
         screen.executeScreen();
     }
 }

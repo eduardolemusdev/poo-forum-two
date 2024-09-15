@@ -1,7 +1,6 @@
 package com.todopc.screens.services;
 
 import com.todopc.database.models.DesktopDevice;
-import com.todopc.database.models.Device;
 import com.todopc.database.models.DeviceSaveResponse;
 import com.todopc.database.models.DeviceSaveResponseStatus;
 import com.todopc.database.repositories.IDevicesRepository;
@@ -9,9 +8,9 @@ import com.todopc.database.repositories.IDevicesRepository;
 import javax.swing.*;
 import java.util.List;
 
-public class SaveDesktopService {
+public class DesktopService {
     private final IDevicesRepository devicesRepository;
-    public SaveDesktopService(IDevicesRepository devicesRepository) {
+    public DesktopService(IDevicesRepository devicesRepository) {
         this.devicesRepository = devicesRepository;
     }
 

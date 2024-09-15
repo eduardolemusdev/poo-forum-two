@@ -1,7 +1,6 @@
-package com.todopc.screens.services;
+package com.todopc.database.repositories;
 
 import com.todopc.database.models.Device;
-import com.todopc.database.repositories.IDevicesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
