@@ -19,31 +19,20 @@ public class Device {
         return manufacterBy;
     }
 
-    public void setManufacterBy(String manufacterBy) throws EmptyValueException {
-        this.manufacterBy = this.validateNotEmptyString(manufacterBy);
-    }
-
     public String getModel() {
         return model;
-    }
-
-    public void setModel(String model) throws EmptyValueException {
-        this.model = this.validateNotEmptyString(model);
     }
 
     public String getIntegratedChip() {
         return integratedChip;
     }
 
-    public void setIntegratedChip(String integratedChip) throws EmptyValueException {
-        this.integratedChip = this.validateNotEmptyString(integratedChip);
-    }
-
-    protected String validateNotEmptyString(String data) throws EmptyValueException {
+    protected DeviceSaveResponse validateNotEmptyString(String propertyTarget, String data) {
        boolean isEmpty = Optional.ofNullable(data).orElse("").trim().isEmpty();
-       if(!isEmpty){
-           throw new EmptyValueException("Valor Requerido: "+data);
+
+       if (isEmpty){
+         return   new DeviceSaveResponse("La propiedad: "+propertyTarget+", es requerida",DeviceSaveResponseStatus.EMPTY_VALUE);
        }
-       return data;
+        return  new DeviceSaveResponse("",DeviceSaveResponseStatus.SUCCESSFULLY);
     }
 }

@@ -1,7 +1,14 @@
 package com.todopc.screens;
 
+import com.todopc.database.models.DesktopDevice;
+import com.todopc.database.repositories.IDevicesRepository;
+import com.todopc.execeptions.EmptyValueException;
+import com.todopc.screens.services.SaveDesktopService;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.util.Arrays;
 
 public class RegistryDeviceScreen extends JFrame {
     private JPanel mainPanel;
@@ -37,37 +44,36 @@ public class RegistryDeviceScreen extends JFrame {
 
     private JTabbedPane tabbedPane1;
 
-
-
-
-
-
     private final String DESKTOPS_OPTION = "1. Desktops";
     private final String LAPTOPS_OPTION = "2. Laptops";
     private final String TABLETS_OPTION = "3. Tablets";
 
-    public RegistryDeviceScreen() {
+    private final SaveDesktopService saveDesktopService;
+
+    public RegistryDeviceScreen(SaveDesktopService saveDesktopService) {
+        this.saveDesktopService = saveDesktopService;
         this.initRegisterComboBox();
         this.handleDeviceToRegisterEvent();
+        this.handleSaveDeviceEvent();
     }
 
     public void executeScreen() {
-        RegistryDeviceScreen screen = new RegistryDeviceScreen();
-        screen.setContentPane(screen.mainPanel);
-        screen.setTitle("UDB Heritage Registry Manager");
-        screen.setSize(700, 400);
-        screen.setVisible(true);
-        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.setContentPane(this.mainPanel);
+        this.setTitle("UDB Heritage Registry Manager");
+        this.setSize(700, 400);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
-    private void initRegisterComboBox(){
+    private void initRegisterComboBox() {
         comboBox1.addItem(DESKTOPS_OPTION);
         comboBox1.addItem(LAPTOPS_OPTION);
         comboBox1.addItem(TABLETS_OPTION);
     }
 
-    private void handleDeviceToRegisterEvent(){
+    private void handleDeviceToRegisterEvent() {
         DesktopsPropertiesPanel.setVisible(true);
         RamAndHardDiskPropertiesPanel.setVisible(true);
         LaptopsPropertiesPanel.setVisible(false);
@@ -100,5 +106,29 @@ public class RegistryDeviceScreen extends JFrame {
         });
     }
 
+    private void handleSaveDeviceEvent() {
+        this.btnSaveDevice.addActionListener((ActionEvent evt) -> {
+            switch (comboBox1.getSelectedItem().toString()) {
+                case DESKTOPS_OPTION:
+
+                    DesktopDevice newDesktop = new DesktopDevice(
+                            this.txtFieldDeviceMadeBy.getText(),
+                            this.txtFieldDeviceModel.getText(),
+                            this.txtFieldDeviceIntegratedChip.getText(),
+                            this.txtFieldDesktopGPU.getText(),
+                            this.txtFieldDesktopTowerSize.getText(),
+                            this.txtFieldHardDriveCapacity.getText(),
+                            this.txtFieldMemoryRamCapacity.getText());
+                    this.saveDesktopService.save(newDesktop, this);
+                    break;
+                case LAPTOPS_OPTION:
+
+                    break;
+                case TABLETS_OPTION:
+
+                    break;
+            }
+        });
+    }
 
 }
