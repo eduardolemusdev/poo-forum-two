@@ -7,29 +7,30 @@ public class LaptopDevice extends Device implements HardDriveStats, MemoryStats{
     private String hardDriveCapacity;
     private String memoryRam;
 
-    public LaptopDevice(String manufacterBy, String model, String integratedChip, String screenSize) throws EmptyValueException {
+    public LaptopDevice(String manufacterBy, String model, String integratedChip,String memoryRam, String screenSize, String hardDriveCapacity) {
         super(manufacterBy, model, integratedChip);
         this.screenSize = screenSize;
+        this.memoryRam = memoryRam;
+        this.hardDriveCapacity = hardDriveCapacity;
     }
 
 
     @Override
     public String getHardDriveCapacity() {
-        return "";
+        return this.hardDriveCapacity;
     }
 
     @Override
     public void setHardDriveCapacity(String hardDriveCapacity) throws EmptyValueException {
-
+        this.hardDriveCapacity = hardDriveCapacity;
     }
 
     @Override
     public String getMemoryRam() {
-        return "";
+        return this.memoryRam;
     }
 
-    @Override
-    public void setMemoryRam(String memoryRam) throws EmptyValueException {
-
+    public String getScreenSize() {
+        return screenSize;
     }
 }

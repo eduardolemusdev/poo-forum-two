@@ -8,7 +8,7 @@ public class TabletDevice extends Device{
     private String nandMemorySize;
     private String operatingSystem;
 
-    public TabletDevice(String manufacterBy, String model, String integratedChip, String diagonalScreenSize, String resistiveCapacitance, String nandMemorySize, String operatingSystem) throws EmptyValueException {
+    public TabletDevice(String manufacterBy, String model, String integratedChip, String diagonalScreenSize, String resistiveCapacitance, String nandMemorySize, String operatingSystem) {
         super(manufacterBy, model, integratedChip);
         this.diagonalScreenSize = diagonalScreenSize;
         this.resistiveCapacitance = resistiveCapacitance;
@@ -16,5 +16,19 @@ public class TabletDevice extends Device{
         this.operatingSystem = operatingSystem;
     }
 
+    public String getDiagonalScreenSize() {
+        return diagonalScreenSize;
+    }
 
+    public String getResistiveCapacitance() {
+        return resistiveCapacitance;
+    }
+
+    public String getNandMemorySize() {
+        return nandMemorySize;
+    }
+
+    public String getOperatingSystem() {
+        return operatingSystem;
+    }
 }

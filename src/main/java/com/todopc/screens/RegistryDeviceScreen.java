@@ -2,7 +2,9 @@ package com.todopc.screens;
 
 import com.todopc.database.models.DesktopDevice;
 import com.todopc.database.models.LaptopDevice;
+import com.todopc.database.models.TabletDevice;
 import com.todopc.database.repositories.IDevicesRepository;
+import com.todopc.execeptions.EmptyValueException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -48,10 +50,12 @@ public class RegistryDeviceScreen extends JFrame {
 
     private final IDevicesRepository<DesktopDevice> desktopRepository;
     private final IDevicesRepository<LaptopDevice> laptopRepository;
+    private final IDevicesRepository<TabletDevice> tabletRepository;
 
-    public RegistryDeviceScreen(IDevicesRepository<DesktopDevice> desktopRepository, IDevicesRepository<LaptopDevice> laptopRepository) {
+    public RegistryDeviceScreen(IDevicesRepository<DesktopDevice> desktopRepository, IDevicesRepository<LaptopDevice> laptopRepository, IDevicesRepository<TabletDevice> tabletRepository) {
         this.desktopRepository = desktopRepository;
         this.laptopRepository = laptopRepository;
+        this.tabletRepository = tabletRepository;
 
         this.initRegisterComboBox();
         this.handleDeviceToRegisterEvent();
@@ -124,14 +128,33 @@ public class RegistryDeviceScreen extends JFrame {
                             this.txtFieldDesktopGPU.getText(),
                             this.txtFieldDesktopTowerSize.getText(),
                             this.txtFieldHardDriveCapacity.getText(),
-                            this.txtFieldMemoryRamCapacity.getText());
+                            this.txtFieldMemoryRamCapacity.getText()
+                    );
                     this.desktopRepository.saveDevice(newDesktop);
                     break;
                 case LAPTOPS_OPTION:
-
+                    LaptopDevice newLaptop = new LaptopDevice(
+                            this.txtFieldDeviceMadeBy.getText(),
+                            this.txtFieldDeviceModel.getText(),
+                            this.txtFieldDeviceIntegratedChip.getText(),
+                            this.txtFieldMemoryRamCapacity.getText(),
+                            this.txtFieldLaptopScreenSize.getText(),
+                            this.txtFieldHardDriveCapacity.getText()
+                    );
+                    this.laptopRepository.saveDevice(newLaptop);
                     break;
                 case TABLETS_OPTION:
-
+                    TabletDevice newTablet = new TabletDevice(
+                            this.txtFieldDeviceMadeBy.getText(),
+                            this.txtFieldDeviceModel.getText(),
+                            this.txtFieldDeviceIntegratedChip.getText(),
+                            this.txtFieldTableScreenDiagonalSize.getText(),
+                            this.comboBoxTabletScreenTech.getSelectedItem().toString(),
+                            this.txtFieldTabletMemoryNandCapacity.getText(),
+                            this.txtFieldTabletOperativeSystem.getText()
+                    );
+                    this.tabletRepository.saveDevice(newTablet);
+                    JOptionPane.showMessageDialog(this,"Guardado Con Exito.");
                     break;
             }
         });

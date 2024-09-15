@@ -58,8 +58,4 @@ public class DesktopDevice extends Device implements MemoryStats, HardDriveStats
         return this.memoryRam;
     }
 
-    @Override
-    public void setMemoryRam(String memoryRam) throws EmptyValueException {
-
-    }
 }
