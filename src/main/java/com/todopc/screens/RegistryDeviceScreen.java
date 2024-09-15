@@ -4,11 +4,16 @@ import com.todopc.database.models.DesktopDevice;
 import com.todopc.database.models.LaptopDevice;
 import com.todopc.database.models.TabletDevice;
 import com.todopc.database.repositories.IDevicesRepository;
-import com.todopc.execeptions.EmptyValueException;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RegistryDeviceScreen extends JFrame {
     private JPanel mainPanel;
@@ -43,6 +48,7 @@ public class RegistryDeviceScreen extends JFrame {
     private JButton btnSaveDevice;
 
     private JTabbedPane tabbedPane1;
+    private JPanel ListPanel;
 
     private final String DESKTOPS_OPTION = "1. Desktops";
     private final String LAPTOPS_OPTION = "2. Laptops";
@@ -60,6 +66,8 @@ public class RegistryDeviceScreen extends JFrame {
         this.initRegisterComboBox();
         this.handleDeviceToRegisterEvent();
         this.handleSaveDeviceEvent();
+
+        this.initTable();
     }
 
     public void executeScreen() {
@@ -160,4 +168,78 @@ public class RegistryDeviceScreen extends JFrame {
         });
     }
 
+    private void initTable(){
+
+        //Layout manager para el panel de listar dispositivos
+        GridBagLayout gridbag = new GridBagLayout();
+
+        //Sirve para posicionar los elementos en un punto (X,Y)
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JLabel selectDevicesLabel = new JLabel("Selecciona el tipo de dispositvo que deseas listar:");
+        JComboBox<String> selectDevicesComboBox = new JComboBox<>();
+
+        selectDevicesComboBox.addItem("1. Desktops");
+        selectDevicesComboBox.addItem("2. Laptops");
+        selectDevicesComboBox.addItem("3. Tablets");
+
+        //agregamos el layout manager, manipula el comportamiento de como ordenamos los elementos en el Jframe
+        this.ListPanel.setLayout(gridbag);
+
+        //agregamos el label al panel
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        this.ListPanel.add(selectDevicesLabel, gbc);
+
+        //agregamos el comboBox abajo del label
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        this.ListPanel.add(selectDevicesComboBox, gbc);
+
+        //Columnas para dispositvos desktop
+        List<String> desktopColumsHeaders = Arrays.asList(
+                "Fabricante",
+                "Modelo",
+                "Microprocesador",
+                "RAM",
+                "GPU",
+                "Tamaño de Torre",
+                "Capacidad de Disco Duro"
+        );
+
+
+        // Inicializmos la tabla, DefaultTableModel nos sirve para agregar columnas y rows a la tabla
+        JTable listTable = new JTable();
+
+        //El DefaultTableModel continee toda la información, de la tabla
+        DefaultTableModel model = new DefaultTableModel();
+
+        //Construimos las columnas
+        desktopColumsHeaders.forEach(model::addColumn);
+
+        //agregamos una fila de prueba
+        model.addRow(new Object[] { "data", "data", "data",
+                "data", "data", "data", "data" });
+
+        //Agregamos el modelo a la tabla
+        listTable.setModel(model);
+
+
+        //Agregamos la tabla en un JscrollPane, se hace por si la tabla crece podamos scrollear
+        JScrollPane scrollPane = new JScrollPane(listTable);
+
+        //le asignamos un tamaño por default - puede variar en base al layout
+        scrollPane.setPreferredSize(new Dimension(500, 150));
+
+        //Agregamos la tabla abajo del combobox
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Asegura que se expanda horizontal y verticalmente
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        this.ListPanel.add(scrollPane, gbc);
+
+
+
+    }
 }
