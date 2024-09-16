@@ -31,4 +31,9 @@ public class TabletDevice extends Device{
     public String getOperatingSystem() {
         return operatingSystem;
     }
+
+    @Override
+    public String getHardDriveCapacity1() {
+        return "";
+    }
 }

@@ -8,9 +8,24 @@ import com.todopc.database.repositories.DevicesAbstractRepository;
 
 public class Main {
     public static void main(String[] args) {
-        DevicesAbstractRepository<DesktopDevice> desktopsDeviceRepository = new DevicesAbstractRepository<>();
-        DevicesAbstractRepository<LaptopDevice> laptopsDeviceRepository = new DevicesAbstractRepository<>();
-        DevicesAbstractRepository<TabletDevice> tabletsDeviceRepository = new DevicesAbstractRepository<>();
+        DevicesAbstractRepository<DesktopDevice> desktopsDeviceRepository = new DevicesAbstractRepository<DesktopDevice>() {
+            @Override
+            public LaptopDevice[] getAllDevices() {
+                return new LaptopDevice[0];
+            }
+        };
+        DevicesAbstractRepository<LaptopDevice> laptopsDeviceRepository = new DevicesAbstractRepository<LaptopDevice>() {
+            @Override
+            public LaptopDevice[] getAllDevices() {
+                return new LaptopDevice[0];
+            }
+        };
+        DevicesAbstractRepository<TabletDevice> tabletsDeviceRepository = new DevicesAbstractRepository<TabletDevice>() {
+            @Override
+            public LaptopDevice[] getAllDevices() {
+                return new LaptopDevice[0];
+            }
+        };
 
         RegistryDeviceScreen screen = new RegistryDeviceScreen(desktopsDeviceRepository, laptopsDeviceRepository, tabletsDeviceRepository);
         screen.executeScreen();

@@ -162,18 +162,14 @@ public class RegistryDeviceScreen extends JFrame {
                             this.txtFieldTabletOperativeSystem.getText()
                     );
                     this.tabletRepository.saveDevice(newTablet);
-                    JOptionPane.showMessageDialog(this,"Guardado Con Exito.");
+                    JOptionPane.showMessageDialog(this, "Guardado Con Exito.");
                     break;
             }
         });
     }
 
-    private void initTable(){
-
-        //Layout manager para el panel de listar dispositivos
+    private void initTable() {
         GridBagLayout gridbag = new GridBagLayout();
-
-        //Sirve para posicionar los elementos en un punto (X,Y)
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel selectDevicesLabel = new JLabel("Selecciona el tipo de dispositvo que deseas listar:");
@@ -183,63 +179,54 @@ public class RegistryDeviceScreen extends JFrame {
         selectDevicesComboBox.addItem("2. Laptops");
         selectDevicesComboBox.addItem("3. Tablets");
 
-        //agregamos el layout manager, manipula el comportamiento de como ordenamos los elementos en el Jframe
         this.ListPanel.setLayout(gridbag);
 
-        //agregamos el label al panel
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
         this.ListPanel.add(selectDevicesLabel, gbc);
 
-        //agregamos el comboBox abajo del label
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 1;
         this.ListPanel.add(selectDevicesComboBox, gbc);
 
-        //Columnas para dispositvos desktop
-        List<String> desktopColumsHeaders = Arrays.asList(
-                "Fabricante",
-                "Modelo",
-                "Microprocesador",
-                "RAM",
-                "GPU",
-                "Tamaño de Torre",
-                "Capacidad de Disco Duro"
-        );
-
-
-        // Inicializmos la tabla, DefaultTableModel nos sirve para agregar columnas y rows a la tabla
         JTable listTable = new JTable();
-
-        //El DefaultTableModel continee toda la información, de la tabla
         DefaultTableModel model = new DefaultTableModel();
-
-        //Construimos las columnas
-        desktopColumsHeaders.forEach(model::addColumn);
-
-        //agregamos una fila de prueba
-        model.addRow(new Object[] { "data", "data", "data",
-                "data", "data", "data", "data" });
-
-        //Agregamos el modelo a la tabla
         listTable.setModel(model);
-
-
-        //Agregamos la tabla en un JscrollPane, se hace por si la tabla crece podamos scrollear
         JScrollPane scrollPane = new JScrollPane(listTable);
-
-        //le asignamos un tamaño por default - puede variar en base al layout
         scrollPane.setPreferredSize(new Dimension(500, 150));
 
-        //Agregamos la tabla abajo del combobox
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Asegura que se expanda horizontal y verticalmente
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 2;
         this.ListPanel.add(scrollPane, gbc);
 
+        selectDevicesComboBox.addActionListener(e -> {
+            String selectedItem = (String) selectDevicesComboBox.getSelectedItem();
+            model.setRowCount(0);
+            model.setColumnCount(0);
 
-
+            switch (selectedItem) {
+                case "1. Desktops":
+                    model.setColumnIdentifiers(new String[]{"Fabricante", "Modelo", "Microprocesador", "RAM", "GPU", "Tamaño de Torre", "Capacidad de Disco Duro"});
+                    for (DesktopDevice device : desktopRepository.getDevices()) {
+                        model.addRow(new Object[]{device.getMadeBy(), device.getModel(), device.getIntegratedChip(), device.getMemoryRamCapacity(), device.getGpu(), device.getTowerSize(), device.getHardDriveCapacity()});
+                    }
+                    break;
+                case "2. Laptops":
+                    model.setColumnIdentifiers(new String[]{"Fabricante", "Modelo", "Microprocesador", "RAM", "Tamaño de Pantalla", "Capacidad de Disco Duro"});
+                    for (LaptopDevice device : laptopRepository.getAllDevices()) {
+                        model.addRow(new Object[]{device.getMadeBy(), device.getModel(), device.getIntegratedChip(), device.getMemoryRamCapacity(), device.getScreenSize(), device.getHardDriveCapacity()});
+                    }
+                    break;
+                case "3. Tablets":
+                    model.setColumnIdentifiers(new String[]{"Fabricante", "Modelo", "Microprocesador", "Tamaño de Pantalla", "Tecnología de Pantalla", "Capacidad de Memoria NAND", "Sistema Operativo"});
+                    for (LaptopDevice device : tabletRepository.getAllDevices()) {
+                        model.addRow(new Object[]{device.getMadeBy(), device.getModel(), device.getIntegratedChip(), device.getScreenDiagonalSize(), device.getScreenTech(), device.getMemoryNandCapacity(), device.getOperativeSystem()});
+                    }
+                    break;
+            }
+        });
     }
 }

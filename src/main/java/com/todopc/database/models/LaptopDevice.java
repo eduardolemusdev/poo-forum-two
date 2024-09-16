@@ -33,4 +33,13 @@ public class LaptopDevice extends Device implements HardDriveStats, MemoryStats{
     public String getScreenSize() {
         return screenSize;
     }
+
+    public Object getMadeBy() {
+        return null;
+    }
+
+    @Override
+    public String getHardDriveCapacity1() {
+        return "";
+    }
 }

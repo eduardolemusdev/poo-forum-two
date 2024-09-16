@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DevicesAbstractRepository<T extends Device> implements IDevicesRepository<T> {
+public abstract class DevicesAbstractRepository<T extends Device> implements IDevicesRepository<T> {
     private List<T> devicesInMemoryDatabase = new ArrayList<>();
 
     @Override
