@@ -47,11 +47,6 @@ public class DesktopDevice extends Device implements MemoryStats, HardDriveStats
     }
 
     @Override
-    public String getHardDriveCapacity() {
-        return "";
-    }
-
-    @Override
     public void setHardDriveCapacity(String hardDriveCapacity) throws EmptyValueException {
         // Implementation here
     }
@@ -86,7 +81,7 @@ public class DesktopDevice extends Device implements MemoryStats, HardDriveStats
         return this.towerSize;
     }
 
-    public String getHardDriveCapacity2() {
+    public String getHardDriveCapacity() {
         return this.hardDriveCapacity;
     }
 }
