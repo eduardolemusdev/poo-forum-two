@@ -162,13 +162,13 @@ public class RegistryDeviceScreen extends JFrame {
                             this.txtFieldTabletOperativeSystem.getText()
                     );
                     this.tabletRepository.saveDevice(newTablet);
-                    JOptionPane.showMessageDialog(this,"Guardado Con Exito.");
+                    JOptionPane.showMessageDialog(this, "Guardado Con Exito.");
                     break;
             }
         });
     }
 
-    private void initTable(){
+    private void initTable() {
 
         //Layout manager para el panel de listar dispositivos
         GridBagLayout gridbag = new GridBagLayout();
@@ -179,9 +179,9 @@ public class RegistryDeviceScreen extends JFrame {
         JLabel selectDevicesLabel = new JLabel("Selecciona el tipo de dispositvo que deseas listar:");
         JComboBox<String> selectDevicesComboBox = new JComboBox<>();
 
-        selectDevicesComboBox.addItem("1. Desktops");
-        selectDevicesComboBox.addItem("2. Laptops");
-        selectDevicesComboBox.addItem("3. Tablets");
+        selectDevicesComboBox.addItem(DESKTOPS_OPTION);
+        selectDevicesComboBox.addItem(LAPTOPS_OPTION);
+        selectDevicesComboBox.addItem(TABLETS_OPTION);
 
         //agregamos el layout manager, manipula el comportamiento de como ordenamos los elementos en el Jframe
         this.ListPanel.setLayout(gridbag);
@@ -209,26 +209,92 @@ public class RegistryDeviceScreen extends JFrame {
                 "Capacidad de Disco Duro"
         );
 
+        //Columnas para laptops
+        List<String> laptopsColumnsHeaders = Arrays.asList(
+                "Fabricante",
+                "Modelo",
+                "Microprocesador",
+                "RAM",
+                "Tamaño de Pantalla",
+                "Capacidad de Disco Duro"
+        );
+
+
+        //Columnas para Tablets
+        List<String> tabletsColumnsHeaders = Arrays.asList(
+                "Fabricante",
+                "Modelo",
+                "Microprocesador",
+                "Tamaño Diagonal de Pantalla",
+                "Capacidad Resistiva",
+                "Sistema Operativo"
+        );
 
         // Inicializmos la tabla, DefaultTableModel nos sirve para agregar columnas y rows a la tabla
-        JTable listTable = new JTable();
+        JTable listTableDevices = new JTable();
 
-        //El DefaultTableModel continee toda la información, de la tabla
-        DefaultTableModel model = new DefaultTableModel();
+        //Ahora que ya tenemos las columnas para cada caso solo nos hace falta manejar el evento cuando el comboBox cambia de valor
+        selectDevicesComboBox.addItemListener((ItemEvent evt) -> {
 
-        //Construimos las columnas
-        desktopColumsHeaders.forEach(model::addColumn);
+            // Cuando se detecta un evento de tipo SELECTED es por que un item del combobox ha sido seleccionado
+            // asi que procedemos con la logica de construccion de la tabla segun la seleccion del usuario
+            if (evt.getStateChange() == ItemEvent.SELECTED) {
 
-        //agregamos una fila de prueba
-        model.addRow(new Object[] { "data", "data", "data",
-                "data", "data", "data", "data" });
+                //Esta variable es el valor del combobox cuando lo seleccionamos puede ser cualquiera de estas opciones
 
-        //Agregamos el modelo a la tabla
-        listTable.setModel(model);
+                //JComboBox<String> selectDevicesComboBox = new JComboBox<>();
+                //
+                //        selectDevicesComboBox.addItem(DESKTOPS_OPTION);
+                //        selectDevicesComboBox.addItem(LAPTOPS_OPTION);
+                //        selectDevicesComboBox.addItem(TABLETS_OPTION);
 
+                String selectValueFromComboBox = selectDevicesComboBox.getSelectedItem().toString();
+
+                //El DefaultTableModel contieee toda la información, de la tabla y nos sirve para manipular la informacion de la tabla dinamicamente
+                //Por eso cada vez que el usuario cambia de opccion creamos una nueva instancia
+                DefaultTableModel model = new DefaultTableModel();
+
+                //adentro del evento vamos a manejar la logica del comobox con un switch para separar que hacer en base a la opción seleccionada
+                switch (selectValueFromComboBox) {
+                    case DESKTOPS_OPTION:
+                        //Creamos las columnas para la tabla de dispositivos desktops
+                        desktopColumsHeaders.forEach(model::addColumn);
+
+                        //ahora tenemos que proceder a consultar nuestra base de datos que tiene los dispositivos que hemos guardado
+                        //recorremos la lista de todos los dispositivos guardados
+                        this.desktopRepository.getDevices().forEach((desktopDevice -> {
+                            //a medidad lo recorremos usando un forEach agregamos una fila al modelo
+                            model.addRow(
+                                    new Object[]{desktopDevice.getManufacterBy(),
+                                            desktopDevice.getModel(),
+                                            desktopDevice.getIntegratedChip(),
+                                            desktopDevice.getMemoryRam(),
+                                            desktopDevice.getGpuModel(),
+                                            desktopDevice.getTowerSize(),
+                                            desktopDevice.getHardDriveCapacity()}
+                            );
+                        }));
+
+                        //despues que agregamos las filas al modelo procedemos a agregar el modelo de datos a la instancia de la tabla
+                        // y con esto ya estaría la funcionalidad de la tabla lista para ver la informacion de los desktops guardados
+                        listTableDevices.setModel(model);
+
+                        // *TAREA* hacer que al abrir el listar dispositvos liste los dispositvos desktop por defecto la primera vez, ya que este codigo solo se ejecuta
+                        // cuando usamos el text box, pista OJO, podemos mover este codigo adentro de una funcion para llamar la funcion en el case DESKTOP_OPTION del switch
+                        // y la podemos usar afuera del addItemListener de este combobox para que se ejecute la logica de mostrar la info la primera vez para mejorar la experiencia de usuario
+                        break;
+                    case LAPTOPS_OPTION:
+                        break;
+                    case TABLETS_OPTION:
+                        break;
+                }
+
+
+            }
+        });
 
         //Agregamos la tabla en un JscrollPane, se hace por si la tabla crece podamos scrollear
-        JScrollPane scrollPane = new JScrollPane(listTable);
+        JScrollPane scrollPane = new JScrollPane(listTableDevices);
 
         //le asignamos un tamaño por default - puede variar en base al layout
         scrollPane.setPreferredSize(new Dimension(500, 150));
@@ -238,7 +304,6 @@ public class RegistryDeviceScreen extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 2;
         this.ListPanel.add(scrollPane, gbc);
-
 
 
     }

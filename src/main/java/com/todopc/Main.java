@@ -12,6 +12,65 @@ public class Main {
         DevicesAbstractRepository<LaptopDevice> laptopsDeviceRepository = new DevicesAbstractRepository<>();
         DevicesAbstractRepository<TabletDevice> tabletsDeviceRepository = new DevicesAbstractRepository<>();
 
+
+        // Datos de prueba
+        DesktopDevice desktop1 = new DesktopDevice(
+                "Dell",              // Made by
+                "Inspiron 3880",      // Model
+                "Intel Core i5",      // Integrated Chip
+                "NVIDIA GTX 1650",    // GPU
+                "Mid Tower",          // Tower Size
+                "1TB",                // Hard Drive Capacity
+                "16GB"                // RAM Capacity
+        );
+
+        DesktopDevice desktop2 = new DesktopDevice(
+                "HP",                 // Made by
+                "Pavilion 590",       // Model
+                "AMD Ryzen 7",        // Integrated Chip
+                "AMD Radeon RX 580",  // GPU
+                "Full Tower",         // Tower Size
+                "512GB",              // Hard Drive Capacity
+                "8GB"                 // RAM Capacity
+        );
+
+        DesktopDevice desktop3 = new DesktopDevice(
+                "Lenovo",             // Made by
+                "ThinkCentre M720",   // Model
+                "Intel Core i7",      // Integrated Chip
+                "Intel UHD 630",      // GPU
+                "Small Form Factor",  // Tower Size
+                "256GB",              // Hard Drive Capacity
+                "32GB"                // RAM Capacity
+        );
+
+        DesktopDevice desktop4 = new DesktopDevice(
+                "Acer",               // Made by
+                "Aspire TC-885",      // Model
+                "Intel Core i3",      // Integrated Chip
+                "NVIDIA GTX 1050",    // GPU
+                "Mini Tower",         // Tower Size
+                "2TB",                // Hard Drive Capacity
+                "12GB"                // RAM Capacity
+        );
+
+        DesktopDevice desktop5 = new DesktopDevice(
+                "Asus",               // Made by
+                "ROG Strix G10",      // Model
+                "AMD Ryzen 5",        // Integrated Chip
+                "NVIDIA RTX 2060",    // GPU
+                "Full Tower",         // Tower Size
+                "1TB",                // Hard Drive Capacity
+                "16GB"                // RAM Capacity
+        );
+
+        desktopsDeviceRepository.saveDevice(desktop1);
+        desktopsDeviceRepository.saveDevice(desktop2);
+        desktopsDeviceRepository.saveDevice(desktop3);
+        desktopsDeviceRepository.saveDevice(desktop4);
+        desktopsDeviceRepository.saveDevice(desktop5);
+
+
         RegistryDeviceScreen screen = new RegistryDeviceScreen(desktopsDeviceRepository, laptopsDeviceRepository, tabletsDeviceRepository);
         screen.executeScreen();
     }
