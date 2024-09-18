@@ -70,6 +70,26 @@ public class Main {
         desktopsDeviceRepository.saveDevice(desktop4);
         desktopsDeviceRepository.saveDevice(desktop5);
 
+        LaptopDevice laptop1 = new LaptopDevice(
+                "Apple",              // Made by
+                "MacBook Pro",        // Model
+                "Apple M1",           // Integrated Chip
+                "16GB",               // RAM Capacity
+                "13.3\"",             // Screen Size
+                "512GB"               // Hard Drive Capacity
+        );
+
+        LaptopDevice laptop2 = new LaptopDevice(
+                "Dell",               // Made by
+                "XPS 13",             // Model
+                "Intel Core i7",      // Integrated Chip
+                "16GB",               // RAM Capacity
+                "13.4\"",             // Screen Size
+                "1TB"                 // Hard Drive Capacity
+        );
+
+        laptopsDeviceRepository.saveDevice(laptop1);
+        laptopsDeviceRepository.saveDevice(laptop2);
 
         RegistryDeviceScreen screen = new RegistryDeviceScreen(desktopsDeviceRepository, laptopsDeviceRepository, tabletsDeviceRepository);
         screen.executeScreen();
