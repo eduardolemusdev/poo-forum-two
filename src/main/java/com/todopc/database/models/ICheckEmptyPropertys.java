@@ -1,7 +1,9 @@
 package com.todopc.database.models;
 
+import com.todopc.execeptions.EmptyValueException;
+
 import java.util.List;
 
 public interface ICheckEmptyPropertys {
-    List<DeviceSaveResponse> checkEmptyPropertys();
+    void checkEmptyPropertys() throws EmptyValueException;
 }

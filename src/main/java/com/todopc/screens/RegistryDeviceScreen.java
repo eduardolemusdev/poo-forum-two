@@ -4,6 +4,7 @@ import com.todopc.database.models.DesktopDevice;
 import com.todopc.database.models.LaptopDevice;
 import com.todopc.database.models.TabletDevice;
 import com.todopc.database.repositories.IDevicesRepository;
+import com.todopc.execeptions.EmptyValueException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -74,6 +75,7 @@ public class RegistryDeviceScreen extends JFrame {
     public void executeScreen() {
 
         this.setContentPane(this.mainPanel);
+        this.setLocationRelativeTo(null);
         this.setTitle("UDB Heritage Registry Manager");
         this.setSize(700, 400);
         this.setVisible(true);
@@ -129,41 +131,61 @@ public class RegistryDeviceScreen extends JFrame {
         this.btnSaveDevice.addActionListener((ActionEvent evt) -> {
             switch (comboBox1.getSelectedItem().toString()) {
                 case DESKTOPS_OPTION:
+                    try {
 
-                    DesktopDevice newDesktop = new DesktopDevice(
-                            this.txtFieldDeviceMadeBy.getText(),
-                            this.txtFieldDeviceModel.getText(),
-                            this.txtFieldDeviceIntegratedChip.getText(),
-                            this.txtFieldDesktopGPU.getText(),
-                            this.txtFieldDesktopTowerSize.getText(),
-                            this.txtFieldHardDriveCapacity.getText(),
-                            this.txtFieldMemoryRamCapacity.getText()
-                    );
-                    this.desktopRepository.saveDevice(newDesktop);
+                        DesktopDevice newDesktop = new DesktopDevice(
+                                this.txtFieldDeviceMadeBy.getText(),
+                                this.txtFieldDeviceModel.getText(),
+                                this.txtFieldDeviceIntegratedChip.getText(),
+                                this.txtFieldDesktopGPU.getText(),
+                                this.txtFieldDesktopTowerSize.getText(),
+                                this.txtFieldHardDriveCapacity.getText(),
+                                this.txtFieldMemoryRamCapacity.getText()
+                        );
+                        newDesktop.checkEmptyPropertys();
+                        JOptionPane.showMessageDialog(this, "Guardado con éxito.");
+
+                        this.desktopRepository.saveDevice(newDesktop);
+                    }catch (EmptyValueException e){
+                        JOptionPane.showMessageDialog(this, e.getMessage());
+                        return;
+                    }
                     break;
                 case LAPTOPS_OPTION:
-                    LaptopDevice newLaptop = new LaptopDevice(
-                            this.txtFieldDeviceMadeBy.getText(),
-                            this.txtFieldDeviceModel.getText(),
-                            this.txtFieldDeviceIntegratedChip.getText(),
-                            this.txtFieldMemoryRamCapacity.getText(),
-                            this.txtFieldLaptopScreenSize.getText(),
-                            this.txtFieldHardDriveCapacity.getText()
-                    );
-                    this.laptopRepository.saveDevice(newLaptop);
+                   try {
+                       LaptopDevice newLaptop = new LaptopDevice(
+                               this.txtFieldDeviceMadeBy.getText(),
+                               this.txtFieldDeviceModel.getText(),
+                               this.txtFieldDeviceIntegratedChip.getText(),
+                               this.txtFieldMemoryRamCapacity.getText(),
+                               this.txtFieldLaptopScreenSize.getText(),
+                               this.txtFieldHardDriveCapacity.getText()
+                       );
+                       newLaptop.checkEmptyPropertys();
+                       this.laptopRepository.saveDevice(newLaptop);
+                   }catch (EmptyValueException e){
+                       JOptionPane.showMessageDialog(this, e.getMessage());
+                       return;
+                   }
                     break;
                 case TABLETS_OPTION:
-                    TabletDevice newTablet = new TabletDevice(
-                            this.txtFieldDeviceMadeBy.getText(),
-                            this.txtFieldDeviceModel.getText(),
-                            this.txtFieldDeviceIntegratedChip.getText(),
-                            this.txtFieldTableScreenDiagonalSize.getText(),
-                            this.comboBoxTabletScreenTech.getSelectedItem().toString(),
-                            this.txtFieldTabletMemoryNandCapacity.getText(),
-                            this.txtFieldTabletOperativeSystem.getText()
-                    );
-                    this.tabletRepository.saveDevice(newTablet);
-                    JOptionPane.showMessageDialog(this, "Guardado Con Exito.");
+                   try{
+                       TabletDevice newTablet = new TabletDevice(
+                               this.txtFieldDeviceMadeBy.getText(),
+                               this.txtFieldDeviceModel.getText(),
+                               this.txtFieldDeviceIntegratedChip.getText(),
+                               this.txtFieldTableScreenDiagonalSize.getText(),
+                               this.comboBoxTabletScreenTech.getSelectedItem().toString(),
+                               this.txtFieldTabletMemoryNandCapacity.getText(),
+                               this.txtFieldTabletOperativeSystem.getText()
+                       );
+                       newTablet.checkEmptyPropertys();
+                       this.tabletRepository.saveDevice(newTablet);
+                       JOptionPane.showMessageDialog(this, "Guardado Con Exito.");
+                   }catch (EmptyValueException e){
+                       JOptionPane.showMessageDialog(this, e.getMessage());
+                       return;
+                   }
                     break;
             }
         });
@@ -245,6 +267,19 @@ public class RegistryDeviceScreen extends JFrame {
 
         // Inicializmos la tabla, DefaultTableModel nos sirve para agregar columnas y rows a la tabla
         JTable listTableDevices = new JTable();
+
+        //Inicilizamos los primeros datos antes de que haya un evento de seleccionado
+        List<Object[]> desktopRows = this.desktopRepository.getDevices().stream().map(desktopDevice -> new Object[]{
+                desktopDevice.getManufacterBy(),
+                desktopDevice.getModel(),
+                desktopDevice.getIntegratedChip(),
+                desktopDevice.getMemoryRam(),
+                desktopDevice.getGpuModel(),
+                desktopDevice.getTowerSize(),
+                desktopDevice.getHardDriveCapacity()
+        }).collect(Collectors.toList());
+        generateTableData(listTableDevices, desktopColumsHeaders, desktopRows);
+
 
         //Ahora que ya tenemos las columnas para cada caso solo nos hace falta manejar el evento cuando el comboBox cambia de valor
         selectDevicesComboBox.addItemListener((ItemEvent evt) -> {

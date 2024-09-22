@@ -2,6 +2,7 @@ package com.todopc.database.models;
 
 import com.todopc.execeptions.EmptyValueException;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public class Device {
@@ -29,7 +30,6 @@ public class Device {
 
     protected DeviceSaveResponse validateNotEmptyString(String propertyTarget, String data) {
        boolean isEmpty = Optional.ofNullable(data).orElse("").trim().isEmpty();
-
        if (isEmpty){
          return   new DeviceSaveResponse("La propiedad: "+propertyTarget+", es requerida",DeviceSaveResponseStatus.EMPTY_VALUE);
        }
