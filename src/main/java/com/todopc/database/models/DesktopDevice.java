@@ -3,7 +3,6 @@ package com.todopc.database.models;
 import com.todopc.execeptions.EmptyValueException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,11 +62,6 @@ public class DesktopDevice extends Device implements MemoryStats, HardDriveStats
     @Override
     public String getHardDriveCapacity() {
         return this.hardDriveCapacity;
-    }
-
-    @Override
-    public void setHardDriveCapacity(String hardDriveCapacity) throws EmptyValueException {
-
     }
 
     @Override

@@ -25,11 +25,6 @@ public class LaptopDevice extends Device implements HardDriveStats, MemoryStats,
     }
 
     @Override
-    public void setHardDriveCapacity(String hardDriveCapacity) throws EmptyValueException {
-        this.hardDriveCapacity = hardDriveCapacity;
-    }
-
-    @Override
     public String getMemoryRam() {
         return this.memoryRam;
     }
